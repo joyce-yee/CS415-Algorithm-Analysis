@@ -14,11 +14,17 @@ int main(int argc, char *argv[]){
         cerr << "Usage: " << argv[0] << " <filename> \n";
         return -1;
     }
-    const string filenum = argv[1];
+    
+    string filenum = argv[1];
+    if(filenum.length() == 1) {
+        filenum = "0" + filenum;
+    }
 
-    string capacity = "KnapsackTestData/p0" + filenum + "_c.txt";
-    string weight = "KnapsackTestData/p0" + filenum + "_w.txt";
-    string values = "KnapsackTestData/p0" + filenum + "_v.txt";
+    // Note that if the prefix is 10, 
+    // your code should be reading files p10*.txt and not p010*.txt
+    string capacity = "KnapsackTestData/p" + filenum + "_c.txt";
+    string weight = "KnapsackTestData/p" + filenum + "_w.txt";
+    string values = "KnapsackTestData/p" + filenum + "_v.txt";
 
     ifstream cap;
     ifstream wei;
@@ -46,9 +52,10 @@ int main(int argc, char *argv[]){
     while(val >> value){
         numVals++;
     }
-
+    cout << "File containing the capacity, weights, and values are: " 
+         << capacity << " " << weight << " " << values << endl;
     cout << "Knapsack capacity = "       << capNum
-         << ". Total number of items = " << numVals << "\n";
+         << ". Total number of items = " << numVals << endl;
 
 
     wei.close();
