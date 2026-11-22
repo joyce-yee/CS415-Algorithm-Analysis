@@ -2,9 +2,13 @@
 #define GREED_H
 #include <iostream>
 #include <vector>
+#include <cstdint>
 #include <string>
 
 using namespace std;
+
+
+
 
 //arrange items in decending order of value-weight ratio,
 // select item in that order till out of sapce
