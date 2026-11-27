@@ -31,9 +31,11 @@ int main(int argc, char *argv[]){
     if (!readValues(filePrefix + "_w.txt", weights)) {
         return 1;
     }
+
     if (!readValues(filePrefix + "_v.txt", values)) {
         return 1;
     }
+    
     if (weights.size() != values.size()) {
         return 2;
     }
