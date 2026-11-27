@@ -7,62 +7,79 @@
 
 using namespace std;
 
-
+bool readCapacity(const string& filename, int& capacity);
+bool readValues(const string& filename, vector<int> &values);
 int main(int argc, char *argv[]){
 
     if(argc != 2){
-        cerr << "Usage: " << argv[0] << " <filename> \n";
+        cerr << "Usage: " << argv[0] << " <test number>\n";
         return -1;
     }
     
-    string filenum = argv[1];
-    if(filenum.length() == 1) {
-        filenum = "0" + filenum;
+    string fileNum = argv[1];
+    if(fileNum.length() == 1) {
+        fileNum = "0" + fileNum;
     }
 
-    // Note that if the prefix is 10, 
-    // your code should be reading files p10*.txt and not p010*.txt
-    string capacity = "KnapsackTestData/p" + filenum + "_c.txt";
-    string weight = "KnapsackTestData/p" + filenum + "_w.txt";
-    string values = "KnapsackTestData/p" + filenum + "_v.txt";
+    string filePrefix = "KnapsackTestData/p" + fileNum;
+    int capacity;
+    vector<int> weights, values;
+    if (!readCapacity(filePrefix + "_c.txt", capacity)) {
+        return 1;
+    }
 
-    ifstream cap;
-    ifstream wei;
-    ifstream val;
+    if (!readValues(filePrefix + "_w.txt", weights)) {
+        return 1;
+    }
+    if (!readValues(filePrefix + "_v.txt", values)) {
+        return 1;
+    }
+    if (weights.size() != values.size()) {
+        return 2;
+    }
 
-    cap.open(capacity);
-    if (!cap.is_open()) {
-        cerr << "Could not open file " << capacity << endl;
-        return -1;
-    }
-    wei.open(weight);
-    if (!wei.is_open()) {
-        cerr << "Could not open file " << weight << endl;
-        return -1;
-    }
-    val.open(values);
-    if (!val.is_open()) {
-        cerr << "Could not open file " << values << endl;
-        return -1;
-    }
-    int capNum;
-    cap >> capNum;
-    int numVals;
-    int value;
-    while(val >> value){
-        numVals++;
-    }
     cout << "File containing the capacity, weights, and values are: " 
-         << capacity << " " << weight << " " << values << endl;
-    cout << "Knapsack capacity = "       << capNum
-         << ". Total number of items = " << numVals << endl;
-
-
-    wei.close();
-    cap.close();
-    val.close();
-
-
+         << filePrefix << "_c.txt, " 
+         << filePrefix << "_w.txt, and " 
+         << filePrefix << "_v.txt\n";
+    cout << "Knapsack capacity = " << capacity
+         << ". Total number of items = " << values.size() << endl;
 
     return 0;
+}
+
+bool readCapacity(const string &filename, int &capacity) {
+    ifstream cap;
+    cap.open(filename);
+    // Opened properly
+    if (!cap.is_open()) {
+        cerr << "Could not open file " << filename << endl;
+        return false;
+    }
+
+    cap >> capacity;
+
+    // Read properly
+    if(!cap) {
+        cerr << "Could not read capacity from file " << filename << endl;
+        return false;
+    }
+    return true;
+}
+
+bool readValues(const string &filename, vector<int> &values) {
+    values.clear();
+
+    ifstream file;
+    file.open(filename);
+    if (!file.is_open()) {
+        cerr << "Could not open file " << filename << endl;
+        return false;
+    }
+
+    int temp;
+    while (file >> temp) {
+        values.push_back(temp);
+    }
+    return file.eof();
 }
